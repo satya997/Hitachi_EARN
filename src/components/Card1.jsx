@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import Modal from "../components/Modal";
 import { projectsByID } from "../apis/service";
-// import { formatDate } from "../utils/helper";
+import { formatDate } from "../utils/helper";
 
 const Card = ({ prj_id, prj_name, start, end, status, nft, description }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -48,9 +48,9 @@ const Card = ({ prj_id, prj_name, start, end, status, nft, description }) => {
       </figure>
       <div className="card-body !mt-0 h-[100px] pt-0 pl-2 pr-2">
         <p className="font-bold">ProjectId: {prj_id}</p>
-        <h2 className="text-xl font-semibold mb-0">Project: {prj_name}</h2>
-        <p className="font-bold">Start: {start}</p>
-        <p className="font-bold">End: {end}</p>
+        <h2 className="mb-0 text-xl font-semibold">Project: {prj_name}</h2>
+        <p className="font-bold">Start: {formatDate(start)} | End: {formatDate(end)}</p>
+        {/* <p className="font-bold">End: {formatDate(end)}</p> */}
         <p>
           <span className="font-bold">Project Status:</span> {status || "N/A"}
         </p>

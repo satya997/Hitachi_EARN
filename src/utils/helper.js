@@ -37,12 +37,10 @@ const catchError = (error) => {
 
 export default catchError;
 
-//datye formatter
-// export function formatDate(dateString) {
-//   const date = new Date(dateString); // Parse the incoming date string
-//   const month = String(date.getMonth() + 1).padStart(2, '0'); // Get month (0-indexed, so +1)
-//   const day = String(date.getDate()).padStart(2, '0'); // Get day
-//   const year = date.getFullYear(); // Get year
-
-//   return `${month} ${day} ${year}`; // Combine to MMDDYYYY
-// }
+export function formatDate(dateString) {
+  const date = new Date(dateString);
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+  const year = date.getFullYear();
+  return `${month}/${day}/${year}`;
+}
