@@ -1,0 +1,34 @@
+/* @import "https://unpkg.com/leaflet@1.9.3/dist/leaflet.css"; */
+@import url('https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Roboto+Slab:wght@100..900&display=swap');
+
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0px;
+  padding: 0px;
+  /* background-color: #171F31; */
+  overflow: hidden;
+  position: absolute;
+  /* font-family: "Poppins", "Poppins"; */
+}
+
+
+
+  .submit-button {
+    @apply px-4 py-1 bg-[#4A4A4A] w-[15.5%] border-4 hover:bg-[#448b3d] border-[#21fc0d] rounded-lg  text-white
+  }
+
+  .scroll-bar {
+    @apply h-64 overflow-y-scroll scrollbar scrollbar-thin scrollbar-thumb-electric-green scrollbar-track-transparent ;
+  }
+  
