@@ -1,6 +1,6 @@
 import React from 'react'
 
-const Marketplace = () => {
+const ImagePage = () => {
   return (
     <div>
       
@@ -8,4 +8,4 @@ const Marketplace = () => {
   )
 }
 
-export default Marketplace
+export default ImagePage

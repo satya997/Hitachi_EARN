@@ -6,7 +6,7 @@ import { formatDate } from "../utils/helper";
 const Card = ({ prj_id, prj_name, start, end, status, nft, description }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isupdateclick, setupdateclick] = useState(false);
-  //   const [projectIDData, setProjectIDData] = useState([]);
+
 
   const upatateclick = () => {
     setupdateclick(true);
@@ -15,27 +15,14 @@ const Card = ({ prj_id, prj_name, start, end, status, nft, description }) => {
     setIsModalOpen(true);
   };
 
-  //   // API call function
-  //   const fetchData = async () => {
-  //     try {
-  //       const response = await projectsByID(prj_id);
-  //       console.log("project id data from API", response);
-  //       setProjectIDData(response);
-  //     } catch (error) {
-  //       console.error("Error fetching data:", error);
-  //     }
-  //   };
-
-  //   useEffect(() => {
-  //     fetchData();
-  //   }, [prj_id]);
+  
 
   const closeModal = () => {
     setIsModalOpen(false);
     setupdateclick(false);
   };
 
-  // console.log("Start:", formatDate(start), "End:", formatDate(end));
+
 
   return (
     <div className="card bg-white border rounded-lg shadow-lg w-[21rem] h-[28rem] mr-1 mb-1">
@@ -61,7 +48,7 @@ const Card = ({ prj_id, prj_name, start, end, status, nft, description }) => {
         <div className="card-actions !mt-5 flex justify-between">
           <button
             className="btn btn-outline btn-primary w-[48.5%]"
-            onClick={openModal} // Pass the prj_id to
+            onClick={openModal} 
           >
             Update
           </button>
