@@ -583,7 +583,9 @@ const Modal = ({ onClose, prj_id, upatateclick }) => {
                   className="h-6 w-6 !ml-4"
                 />
                 <u>
-                  <span className="ml-2 text-lg font-semibold">Project Details</span>
+                  <span className="ml-2 text-lg font-semibold">
+                    Project Details
+                  </span>
                 </u>
                 <span className="flex-grow"></span>
                 <a href="#" className="mr-4 text-lg underline">
@@ -822,18 +824,16 @@ const Modal = ({ onClose, prj_id, upatateclick }) => {
                 )}
               </div> */}
               <div className="flex justify-end space-x-2">
+                {!prj_id && (
+                  <button
+                    type="button"
+                    onClick={handleCancel}
+                    className="submit-button"
+                  >
+                    Cancel
+                  </button>
+                )}
 
-            { !prj_id && (
-                <button
-                  type="button"
-                  onClick={handleCancel}
-                  className="submit-button"
-                >
-                  Cancel
-                </button>
-                )
-              }
-                
                 <button
                   type="submit"
                   onClick={(e) => handleSubmit(e, !!prj_id)} // Pass whether it's an update
@@ -841,7 +841,7 @@ const Modal = ({ onClose, prj_id, upatateclick }) => {
                 >
                   {prj_id ? "Edit & Update" : "Save"}
                 </button>
-                
+
                 {!prj_id && (
                   <button
                     type="button"
