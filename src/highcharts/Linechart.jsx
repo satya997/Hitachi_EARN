@@ -238,7 +238,7 @@ const LineChart = ({ height, width, color,small }) => {
     Highcharts.chart('lineChartContainer', options);
   }, []);
 
-  return <div id="lineChartContainer" style={{ width, height }}></div>;
+  return <div id="lineChartContainer" style={{ width, height }} className='bg-gray-700'></div>;
 };
 
 export default LineChart;

@@ -29,6 +29,6 @@ body {
   }
 
   .scroll-bar {
-    @apply h-64 overflow-y-scroll scrollbar scrollbar-thin scrollbar-thumb-electric-green scrollbar-track-transparent ;
+    @apply overflow-y-scroll h-[230px] scrollbar scrollbar-thin scrollbar-thumb-electric-green scrollbar-track-transparent ;
   }
   

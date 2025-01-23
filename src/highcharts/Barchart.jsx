@@ -100,7 +100,7 @@ const BarChart = ({ width, height, color,small }) => {
     Highcharts.chart('lineContainer', options);
   }, []);
 
-  return <div id="lineContainer" style={{ width, height }}></div>;
+  return <div id="lineContainer" style={{ width, height , }} className='bg-gray-700'></div>;
 };
 
 export default BarChart;

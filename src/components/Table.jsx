@@ -62,7 +62,7 @@ const Table = () => {
   ];
 
   return (
-    <div className=" ml-2 rounded-md w-full sm:w-[652px] bg-gray-800 mb-20">
+    <div className=" ml-2 rounded-md w-full sm:w-[652px] bg-gray-800 h-[110px] mb-20">
       <h2 className="text-[#21fc0d] text-center font-poppins min-w-[316px] m-0 text-[27px] font-normal border-2 border-[#21fc0d] bg-gray-700 py-2">
         Marketplace Alerts
       </h2>

@@ -102,7 +102,7 @@ const OilfieldAsset = () => {
         </div>
       </div>
       <div className="flex mt-2 gap-1 h-[40%] w-[100%] ">
-        <Table className="w-[60%] h-[50%]" />
+        <Table className="w-[60%] h-[200px]" />
         <div className="flex flex-col w-[60.5vw]">
           <h2 className="text-[#21fc0d] text-center font-poppins min-w-[316px] m-0 text-[27px] font-normal border-2 border-[#21fc0d] flex justify-around bg-gray-700 py-2">
             Tokenization Trend Analysis
@@ -115,7 +115,7 @@ const OilfieldAsset = () => {
             </span>
           </h2>
           <span className="flex w-full">
-            <Barchart height="25vh" width="50%" />
+            <Barchart height="25vh" width="50%"  />
             <Linechart height="25vh" width="50%" />
           </span>
         </div>

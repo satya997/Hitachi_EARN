@@ -1,64 +1,88 @@
-import React from "react";
+import React, { useState } from "react";
 import Sidebar from "../components/Sidebar";
-// import Mainheader from "../components/Mainheader";
-// import { MdDeleteForever, MdOutlineFileUpload } from "react-icons/md";
+import { useNavigate } from "react-router-dom";
+import ImageUploadModal from "../pages/ImageUploadModal"; // Import your modal component
+const ImagePage = (toggleItem) => {
+  const navigate = useNavigate();
+  const [isModalOpen, setIsModalOpen] = useState(false); // State to control modal visibility
+  const [uploadedImage, setUploadedImage] = useState(null); // State to hold uploaded image
 
-const ImagePage = (Sidebar) => {
+  const handleUploadClick = () => {
+    setIsModalOpen(true); // Open the modal
+  };
+  const closeModal = () => {
+    setIsModalOpen(false); // Close the modal
+  };
+
   return (
-    <div className="w-[1000px]">
-      <div className="flex items-center mt-9 text-white/90">
-        <img
-          src={"/images/Frame-148.png" || "/placeholder.svg"}
-          alt="Dropdown Icon"
-          className="w-6 h-6 "
-        />
-
-        <strong>
+    <>
+      <div className="w-[1000px]">
+        <div className="flex items-center mt-9 text-white/90">
+          <img
+            src={"/images/Frame-148.png" || "/placeholder.svg"}
+            alt="Dropdown Icon"
+            className="w-6 h-6 "
+          />
           <span
-            onClick={() => toggleItem("/oilfield_asset_marketplace")}
-            className="ml-2 text-lg cursor-pointer"
+            onClick={() => navigate("/oilfield_asset_marketplace")}
+            className="ml-2 text-lg font-semibold cursor-pointer"
           >
             Project Information
           </span>
-        </strong>
-        {/* <span className="text-lg">Project Information</span> */}
-        <span className="ml-4 text-lg ">&gt;</span>
-        <img
-          src={"/images/Frame-147.png" || "/placeholder.svg"}
-          alt="Dropdown Icon"
-          className="h-6 w-6 !ml-4"
-        />
-
-        <span className="ml-2 text-lg font-semibold cursor-pointer">Soul Bound Asset</span>
-
-        <span className="ml-4 text-lg ">&gt;</span>
-
-        <img
-          src={"/images/Frame-40.png" || "/placeholder.svg"}
-          alt="Dropdown Icon"
-          className="h-6 w-6 !ml-4"
-        />
-        <span className="ml-3 text-lg underline cursor-pointer">Images</span>
-
-        {/* Action Icons */}
-        <div className="flex items-center gap-4 ml-[21em] text-lg">
-          {/* Upload Icon */}
+          <span className="ml-4 text-lg ">&gt;</span>
           <img
-            src="/icons/upload-2.png" // Replace with the correct path to your upload icon image
-            alt="Upload"
-            className="w-6 h-6"
+            src={"/images/Frame-147.png" || "/placeholder.svg"}
+            alt="Dropdown Icon"
+            className="h-6 w-6 !ml-4"
           />
-
-          {/* Delete Icon */}
+          <span className="ml-2 text-lg font-semibold cursor-pointer">
+            Soul Bound Asset
+          </span>
+          <span className="ml-4 text-lg ">&gt;</span>
           <img
-            src="/icons/delete.png" // Replace with the correct path to your delete icon image
-            alt="Delete"
-            className="w-6 h-6 cursor-pointer"
+            src={"/images/Frame-40.png" || "/placeholder.svg"}
+            alt="Dropdown Icon"
+            className="h-6 w-6 !ml-4"
           />
+          <span className="mb-1 ml-3 text-lg font-semibold underline cursor-pointer">
+            Image
+          </span>
+          <div className="flex items-center gap-4 ml-[21em] text-lg">
+            {/* Upload Icon */}
+            <img
+              src="/icons/upload-2.png"
+              alt="Upload"
+              className="w-6 h-6 cursor-pointer"
+              onClick={handleUploadClick} // Add click handler
+            />
+            {/* Delete Icon */}
+            <img
+              src="/icons/delete.png"
+              alt="Delete"
+              className="w-6 h-6 cursor-pointer"
+            />
+          </div>
         </div>
+
+        {/* Display Uploaded Image */}
+        {uploadedImage && (
+          <div className="mt-4">
+            <img
+              src={uploadedImage}
+              alt="Uploaded"
+              className="object-cover w-[200px] h-[200px] rounded-md"
+            />
+          </div>
+        )}
+
+        {/* Modal */}
+        <ImageUploadModal
+          onClose={closeModal}
+          visible={isModalOpen}
+          onImageUpload={setUploadedImage} // Pass the state updater
+        />
       </div>
-    </div>
+    </>
   );
 };
-
 export default ImagePage;

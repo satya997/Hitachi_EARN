@@ -27,7 +27,7 @@ const Modal = ({ onClose, prj_id, upatateclick }) => {
 
   const urlItem = searchParams.get("prj");
 
-  console.log(searchParams.get("prj"), "Sss");
+  // console.log(searchParams.get("prj"), "Sss");
 
   useEffect(() => {
     const fetchProjectData = async () => {
