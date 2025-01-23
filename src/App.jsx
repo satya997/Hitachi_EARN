@@ -3,7 +3,6 @@ import Login from "./pages/Login";
 import "./index.css";
 import MicroDashboard from "./pages/MicroDashboard";
 import OilfieldAsset from "./pages/OilfieldAsset";
-
 import AllGraphs from "./pages/AllGraphs";
 import ImagePage from "./pages/ImagePage";
 
