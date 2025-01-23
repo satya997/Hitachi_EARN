@@ -3,6 +3,7 @@ import { CiSearch } from "react-icons/ci";
 import { IoAddOutline } from "react-icons/io5";
 // import drop from "../assets/Images1/Drop Down.png";
 import Modal from "../components/Modal";
+import { useNavigate } from "react-router-dom";
 
 const OilfieldHeader = () => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -30,12 +31,18 @@ const OilfieldHeader = () => {
   const openTab2 = () => setOption2((prev) => !prev);
   const openTab3 = () => setOption3((prev) => !prev);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const navigate = useNavigate();
 
   const openModal = () => {
+    // naviagte("/oilfield_asset_marketplace?prj=prj-info");
     setIsModalOpen(true);
   };
 
   const closeModal = () => {
+    // naviagte("/oilfield_asset_marketplace");
+    // Remove the query string
+    console.log("Close Modal");
+    navigate("/oilfield_asset_marketplace", { replace: true });
     setIsModalOpen(false);
   };
 

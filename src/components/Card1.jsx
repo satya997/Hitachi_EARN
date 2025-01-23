@@ -2,22 +2,26 @@ import React, { useState, useRef, useEffect } from "react";
 import Modal from "../components/Modal";
 import { projectsByID } from "../apis/service";
 import { formatDate } from "../utils/helper";
+import { useNavigate } from "react-router-dom";
 
 const Card = ({ prj_id, prj_name, start, end, status, nft, description }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isupdateclick, setupdateclick] = useState(false);
+  const navigate = useNavigate();
 
 
   const upatateclick = () => {
     setupdateclick(true);
   };
   const openModal = () => {
+    
     setIsModalOpen(true);
   };
 
   
 
   const closeModal = () => {
+    navigate("/oilfield_asset_marketplace", { replace: true });
     setIsModalOpen(false);
     setupdateclick(false);
   };

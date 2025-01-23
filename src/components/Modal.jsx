@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { data } from "react-router-dom";
+import { data, useSearchParams } from "react-router-dom";
 import Sidebar from "../components/Sidebar";
 import Mainheader from "../components/Mainheader";
+import ImagePage from "../pages/ImagePage";
 const Modal = ({ onClose, prj_id, upatateclick }) => {
   const [formData, setFormData] = useState({
     projectName: "",
@@ -22,6 +23,11 @@ const Modal = ({ onClose, prj_id, upatateclick }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
+  const [searchParams] = useSearchParams();
+
+  const urlItem = searchParams.get("prj");
+
+  console.log(searchParams.get("prj"), "Sss");
 
   useEffect(() => {
     const fetchProjectData = async () => {
@@ -175,281 +181,287 @@ const Modal = ({ onClose, prj_id, upatateclick }) => {
           <div className="bg-[#171F31] p-6 h-[726px]">
             <Mainheader />
 
-            <form
-              onSubmit={handleSubmit}
-              className="space-y-1 mx-auto w-[1000px]"
-            >
-              <div className="flex items-center mt-6 text-white/90">
-                <img
-                  src={"/images/Frame-148.png" || "/placeholder.svg"}
-                  alt="Dropdown Icon"
-                  className="w-6 h-6 "
-                />
+            {urlItem === "prj-images" ? (
+              <ImagePage/>
+            ) : (
+              <form
+                onSubmit={handleSubmit}
+                className="space-y-1 mx-auto w-[1000px]"
+              >
+                <div className="flex items-center mt-6 text-white/90">
+                  <img
+                    src={"/images/Frame-148.png" || "/placeholder.svg"}
+                    alt="Dropdown Icon"
+                    className="w-6 h-6 "
+                  />
 
-                <strong>
-                  <span className="ml-2 text-lg ">Project Information</span>
-                </strong>
-                {/* <span className="text-lg">Project Information</span> */}
-                <span className="ml-4 text-lg ">&gt;</span>
-                <img
-                  src={"/images/Frame-148.png" || "/placeholder.svg"}
-                  alt="Dropdown Icon"
-                  className="h-6 w-6 !ml-4"
-                />
-                <u>
-                  <span className="ml-2 text-lg font-semibold">
-                    Project Details
-                  </span>
-                </u>
-                <span className="flex-grow"></span>
-                <a href="#" className="mr-4 text-lg underline">
-                  Project Trail (Blockchain)
-                </a>
-              </div>
+                  <strong>
+                    <span className="ml-2 text-lg ">Project Information</span>
+                  </strong>
+                  {/* <span className="text-lg">Project Information</span> */}
+                  <span className="ml-4 text-lg ">&gt;</span>
+                  <img
+                    src={"/images/Frame-148.png" || "/placeholder.svg"}
+                    alt="Dropdown Icon"
+                    className="h-6 w-6 !ml-4"
+                  />
+                  <u>
+                    <span className="ml-2 text-lg font-semibold">
+                      Project Details
+                    </span>
+                  </u>
+                  <span className="flex-grow"></span>
+                  <a href="#" className="mr-4 text-lg underline">
+                    Project Trail (Blockchain)
+                  </a>
+                </div>
 
-              <div className="grid gap-8 lg:grid-cols-2">
-                <div>
-                  <div className="mt-5 space-y-3">
-                    <div className="flex items-center space-x-4">
-                      <label
-                        htmlFor="projectName"
-                        className="block w-32 text-white/90"
-                      >
-                        Project Name:
-                      </label>
-                      <input
-                        id="projectName"
-                        name="projectName"
-                        value={formData.projectName}
-                        onChange={handleInputChange}
-                        required
-                        className="flex-1 bg-[#4A4A4A] border border-[#ffffff] rounded p-2 text-white/90"
-                      />
+                <div className="grid gap-8 lg:grid-cols-2">
+                  <div>
+                    <div className="mt-5 space-y-3">
+                      <div className="flex items-center space-x-4">
+                        <label
+                          htmlFor="projectName"
+                          className="block w-32 text-white/90"
+                        >
+                          Project Name:
+                        </label>
+                        <input
+                          id="projectName"
+                          name="projectName"
+                          value={formData.projectName}
+                          onChange={handleInputChange}
+                          required
+                          className="flex-1 bg-[#4A4A4A] border border-[#ffffff] rounded p-2 text-white/90"
+                        />
+                      </div>
+
+                      <div className="flex items-center space-x-4">
+                        <label
+                          htmlFor="projectId"
+                          className="block w-32 text-white/90"
+                        >
+                          Project ID:
+                        </label>
+                        <input
+                          id="projectId"
+                          name="projectId"
+                          value={formData.projectId}
+                          onChange={handleInputChange}
+                          className="flex-1 bg-[#4A4A4A] border border-[#ffffff] rounded p-2 text-white/90"
+                        />
+                      </div>
+
+                      <div className="flex items-center space-x-4">
+                        <label
+                          htmlFor="startDate"
+                          className="block w-32 text-white/90"
+                        >
+                          Start Date:
+                        </label>
+                        <input
+                          id="startDate"
+                          name="startDate"
+                          type="date"
+                          value={formData.startDate.split("T")[0]}
+                          onChange={handleInputChange}
+                          className="flex-1 bg-[#4A4A4A] border border-[#ffffff] rounded p-2 text-white/90"
+                        />
+                      </div>
+
+                      <div className="flex items-center space-x-4">
+                        <label
+                          htmlFor="endDate"
+                          className="block w-32 text-white/90"
+                        >
+                          End Date:
+                        </label>
+                        <input
+                          id="endDate"
+                          name="endDate"
+                          type="date"
+                          value={formData.endDate.split("T")[0]}
+                          onChange={handleInputChange}
+                          className="flex-1 bg-[#4A4A4A] border border-[#ffffff] rounded p-2 text-white/90"
+                        />
+                      </div>
+
+                      <div className="flex items-center space-x-4">
+                        <label
+                          htmlFor="managementCompany"
+                          className="block w-32 text-white/90"
+                        >
+                          Management Company:
+                        </label>
+                        <input
+                          id="managementCompany"
+                          name="managementCompany"
+                          value={formData.managementCompany}
+                          onChange={handleInputChange}
+                          className="flex-1 bg-[#4A4A4A] border border-[#ffffff] rounded p-2 text-white/90"
+                        />
+                      </div>
+
+                      <div className="flex items-center space-x-4">
+                        <label
+                          htmlFor="nftSupply"
+                          className="block w-32 text-white/90"
+                        >
+                          NFT Token Supply(s):
+                        </label>
+                        <input
+                          id="nftSupply"
+                          name="nftSupply"
+                          type="number"
+                          value={formData.nftSupply}
+                          onChange={handleInputChange}
+                          className="flex-1 bg-[#4A4A4A] border border-[#ffffff] rounded p-2 text-white/90"
+                        />
+                      </div>
+
+                      <div className="flex items-start space-x-4">
+                        <label
+                          htmlFor="description"
+                          className="block w-32 pt-2 text-white/90"
+                        >
+                          Description:
+                        </label>
+                        <textarea
+                          id="description"
+                          name="description"
+                          value={formData.description}
+                          onChange={handleInputChange}
+                          className="flex-1 bg-[#4A4A4A] border border-[#ffffff] rounded p-2 text-white/90 min-h-[100px]"
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  <div>
+                    <div className="border-b border-[#2a3442] p-4">
+                      <h2 className="text-lg font-semibold text-white/90">
+                        Soul Bound Asset Properties:
+                      </h2>
+                      <div className="text-sm text-white/60">
+                        Asset Id: 0001
+                      </div>
                     </div>
 
-                    <div className="flex items-center space-x-4">
-                      <label
-                        htmlFor="projectId"
-                        className="block w-32 text-white/90"
-                      >
-                        Project ID:
-                      </label>
-                      <input
-                        id="projectId"
-                        name="projectId"
-                        value={formData.projectId}
-                        onChange={handleInputChange}
-                        className="flex-1 bg-[#4A4A4A] border border-[#ffffff] rounded p-2 text-white/90"
-                      />
-                    </div>
+                    <div className="p-3 space-y-2 border border-[#21fc0d] rounded-lg">
+                      <div className="flex items-center space-x-4">
+                        <label
+                          htmlFor="address"
+                          className="block w-32 text-white/90"
+                        >
+                          Address:
+                        </label>
+                        <input
+                          id="address"
+                          name="address"
+                          value={formData.address}
+                          onChange={handleInputChange}
+                          className="flex-1 bg-[#4A4A4A] border border-[#ffffff] rounded p-2 text-white/90"
+                        />
+                      </div>
 
-                    <div className="flex items-center space-x-4">
-                      <label
-                        htmlFor="startDate"
-                        className="block w-32 text-white/90"
-                      >
-                        Start Date:
-                      </label>
-                      <input
-                        id="startDate"
-                        name="startDate"
-                        type="date"
-                        value={formData.startDate.split("T")[0]}
-                        onChange={handleInputChange}
-                        className="flex-1 bg-[#4A4A4A] border border-[#ffffff] rounded p-2 text-white/90"
-                      />
-                    </div>
+                      <div className="flex items-center space-x-4">
+                        <label
+                          htmlFor="landmark"
+                          className="block w-32 text-white/90"
+                        >
+                          Landmark:
+                        </label>
+                        <input
+                          id="landmark"
+                          name="landmark"
+                          value={formData.landmark}
+                          onChange={handleInputChange}
+                          className="flex-1 bg-[#4A4A4A] border border-[#ffffff] rounded p-2 text-white/90"
+                        />
+                      </div>
 
-                    <div className="flex items-center space-x-4">
-                      <label
-                        htmlFor="endDate"
-                        className="block w-32 text-white/90"
-                      >
-                        End Date:
-                      </label>
-                      <input
-                        id="endDate"
-                        name="endDate"
-                        type="date"
-                        value={formData.endDate.split("T")[0]}
-                        onChange={handleInputChange}
-                        className="flex-1 bg-[#4A4A4A] border border-[#ffffff] rounded p-2 text-white/90"
-                      />
-                    </div>
+                      <div className="flex items-center space-x-4">
+                        <label
+                          htmlFor="latitude"
+                          className="block w-32 text-white/90"
+                        >
+                          Latitude:
+                        </label>
+                        <input
+                          id="latitude"
+                          name="latitude"
+                          value={formData.latitude}
+                          onChange={handleInputChange}
+                          className="flex-1 bg-[#4A4A4A] border border-[#ffffff] rounded p-2 text-white/90"
+                        />
+                      </div>
 
-                    <div className="flex items-center space-x-4">
-                      <label
-                        htmlFor="managementCompany"
-                        className="block w-32 text-white/90"
-                      >
-                        Management Company:
-                      </label>
-                      <input
-                        id="managementCompany"
-                        name="managementCompany"
-                        value={formData.managementCompany}
-                        onChange={handleInputChange}
-                        className="flex-1 bg-[#4A4A4A] border border-[#ffffff] rounded p-2 text-white/90"
-                      />
-                    </div>
+                      <div className="flex items-center space-x-4">
+                        <label
+                          htmlFor="longitude"
+                          className="block w-32 text-white/90"
+                        >
+                          Longitude:
+                        </label>
+                        <input
+                          id="longitude"
+                          name="longitude"
+                          value={formData.longitude}
+                          onChange={handleInputChange}
+                          className="flex-1 bg-[#4A4A4A] border border-[#ffffff] rounded p-2 text-white/90"
+                        />
+                      </div>
 
-                    <div className="flex items-center space-x-4">
-                      <label
-                        htmlFor="nftSupply"
-                        className="block w-32 text-white/90"
-                      >
-                        NFT Token Supply(s):
-                      </label>
-                      <input
-                        id="nftSupply"
-                        name="nftSupply"
-                        type="number"
-                        value={formData.nftSupply}
-                        onChange={handleInputChange}
-                        className="flex-1 bg-[#4A4A4A] border border-[#ffffff] rounded p-2 text-white/90"
-                      />
-                    </div>
-
-                    <div className="flex items-start space-x-4">
-                      <label
-                        htmlFor="description"
-                        className="block w-32 pt-2 text-white/90"
-                      >
-                        Description:
-                      </label>
-                      <textarea
-                        id="description"
-                        name="description"
-                        value={formData.description}
-                        onChange={handleInputChange}
-                        className="flex-1 bg-[#4A4A4A] border border-[#ffffff] rounded p-2 text-white/90 min-h-[100px]"
-                      />
+                      <div className="flex items-start space-x-4">
+                        <label
+                          htmlFor="assetDescription"
+                          className="block w-32 pt-2 text-white/90"
+                        >
+                          Description:
+                        </label>
+                        <textarea
+                          id="assetDescription"
+                          name="assetDescription"
+                          value={formData.assetDescription}
+                          onChange={handleInputChange}
+                          className="flex-1 bg-[#4A4A4A] border border-[#ffffff] rounded p-2 text-white/90 min-h-[100px]"
+                        />
+                      </div>
                     </div>
                   </div>
                 </div>
 
-                <div>
-                  <div className="border-b border-[#2a3442] p-4">
-                    <h2 className="text-lg font-semibold text-white/90">
-                      Soul Bound Asset Properties:
-                    </h2>
-                    <div className="text-sm text-white/60">Asset Id: 0001</div>
-                  </div>
+                <div className="flex justify-end space-x-2">
+                  {!prj_id && (
+                    <button
+                      type="button"
+                      onClick={handleCancel}
+                      className="submit-button"
+                    >
+                      Cancel
+                    </button>
+                  )}
 
-                  <div className="p-3 space-y-2 border border-[#21fc0d] rounded-lg">
-                    <div className="flex items-center space-x-4">
-                      <label
-                        htmlFor="address"
-                        className="block w-32 text-white/90"
-                      >
-                        Address:
-                      </label>
-                      <input
-                        id="address"
-                        name="address"
-                        value={formData.address}
-                        onChange={handleInputChange}
-                        className="flex-1 bg-[#4A4A4A] border border-[#ffffff] rounded p-2 text-white/90"
-                      />
-                    </div>
+                  <button
+                    type="submit"
+                    onClick={(e) => handleSubmit(e, !!prj_id)} // Pass whether it's an update
+                    className="submit-button"
+                  >
+                    {prj_id ? "Edit & Update" : "Save"}
+                  </button>
 
-                    <div className="flex items-center space-x-4">
-                      <label
-                        htmlFor="landmark"
-                        className="block w-32 text-white/90"
-                      >
-                        Landmark:
-                      </label>
-                      <input
-                        id="landmark"
-                        name="landmark"
-                        value={formData.landmark}
-                        onChange={handleInputChange}
-                        className="flex-1 bg-[#4A4A4A] border border-[#ffffff] rounded p-2 text-white/90"
-                      />
-                    </div>
-
-                    <div className="flex items-center space-x-4">
-                      <label
-                        htmlFor="latitude"
-                        className="block w-32 text-white/90"
-                      >
-                        Latitude:
-                      </label>
-                      <input
-                        id="latitude"
-                        name="latitude"
-                        value={formData.latitude}
-                        onChange={handleInputChange}
-                        className="flex-1 bg-[#4A4A4A] border border-[#ffffff] rounded p-2 text-white/90"
-                      />
-                    </div>
-
-                    <div className="flex items-center space-x-4">
-                      <label
-                        htmlFor="longitude"
-                        className="block w-32 text-white/90"
-                      >
-                        Longitude:
-                      </label>
-                      <input
-                        id="longitude"
-                        name="longitude"
-                        value={formData.longitude}
-                        onChange={handleInputChange}
-                        className="flex-1 bg-[#4A4A4A] border border-[#ffffff] rounded p-2 text-white/90"
-                      />
-                    </div>
-
-                    <div className="flex items-start space-x-4">
-                      <label
-                        htmlFor="assetDescription"
-                        className="block w-32 pt-2 text-white/90"
-                      >
-                        Description:
-                      </label>
-                      <textarea
-                        id="assetDescription"
-                        name="assetDescription"
-                        value={formData.assetDescription}
-                        onChange={handleInputChange}
-                        className="flex-1 bg-[#4A4A4A] border border-[#ffffff] rounded p-2 text-white/90 min-h-[100px]"
-                      />
-                    </div>
-                  </div>
+                  {!prj_id && (
+                    <button
+                      type="button"
+                      onClick={(e) => handleSaveAndNext(e)} // Handle Save & Next separately
+                      className="submit-button"
+                    >
+                      Save & Next
+                    </button>
+                  )}
                 </div>
-              </div>
-
-              <div className="flex justify-end space-x-2">
-                {!prj_id && (
-                  <button
-                    type="button"
-                    onClick={handleCancel}
-                    className="submit-button"
-                  >
-                    Cancel
-                  </button>
-                )}
-
-                <button
-                  type="submit"
-                  onClick={(e) => handleSubmit(e, !!prj_id)} // Pass whether it's an update
-                  className="submit-button"
-                >
-                  {prj_id ? "Edit & Update" : "Save"}
-                </button>
-
-                {!prj_id && (
-                  <button
-                    type="button"
-                    onClick={(e) => handleSaveAndNext(e)} // Handle Save & Next separately
-                    className="submit-button"
-                  >
-                    Save & Next
-                  </button>
-                )}
-              </div>
-            </form>
+              </form>
+            )}
           </div>
         </div>
       </div>

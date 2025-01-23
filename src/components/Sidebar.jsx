@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 import { IoIosArrowDropright, IoIosArrowDropdown } from "react-icons/io";
 import { MdKeyboardArrowDown, MdKeyboardArrowRight } from "react-icons/md";
+import { useNavigate, useSearchParams } from "react-router-dom";
 
 const Sidebar = ({ onClose, prj_id, updateClick }) => {
+  const navigate = useNavigate();
   const [activeItems, setActiveItems] = useState({
     projectInformation: false,
     soulBoundAsset: false,
@@ -31,8 +33,16 @@ const Sidebar = ({ onClose, prj_id, updateClick }) => {
         newState[key] = key === item;
       });
 
+      if (item === "images") {
+        // Defer navigation to avoid modifying state during render
+        setTimeout(() => {
+          navigate("/oilfield_asset_marketplace?prj=prj-images");
+        }, 0);
+      }
+
       // Special handling for Project Information and its children
       if (item === "projectInformation") {
+        navigate("/oilfield_asset_marketplace");
         setIsProjectInfoOpen(!isProjectInfoOpen);
         setCurrentImage(
           !isProjectInfoOpen ? "/images/group-2.png" : "/images/group-1.png"
@@ -40,21 +50,16 @@ const Sidebar = ({ onClose, prj_id, updateClick }) => {
       } else if (
         item === "soulBoundAsset" ||
         item === "images" ||
-      
         item === "documents" ||
         item === "liveVerification"
       ) {
         newState.projectInformation = true;
         if (item === "soulBoundAsset") {
           setIsSoulBoundAssetOpen(!isSoulBoundAssetOpen);
-         
         } else {
           newState.soulBoundAsset = true;
         }
-        if (
-          item === "images" 
-         
-        ) {
+        if (item === "images") {
           setIsImagesOpen(!isImagesOpen);
         }
       } else {
@@ -66,6 +71,7 @@ const Sidebar = ({ onClose, prj_id, updateClick }) => {
       return newState;
     });
   };
+
   return (
     <div className="w-1/2 bg-[#4a4a4a] p-4 h-[726px]  space-y-7">
       <ul className="space-y-4 text-sm">
@@ -121,20 +127,15 @@ const Sidebar = ({ onClose, prj_id, updateClick }) => {
                   onClick={() => toggleItem("images")}
                 >
                   <div className="flex items-center ml-5 space-x-2">
-                    {isImagesOpen ? (
-                      <MdKeyboardArrowDown className="!w-6 !h-6" />
-                    ) : (
-                      <MdKeyboardArrowRight className=" !w-6 !h-6" />
-                    )}
+                    <MdKeyboardArrowRight className="!w-6 !h-6" />
                     <img
-                      src={"/images/Frame-40.png" || "/placeholder.svg"}
+                      src={"/images/Frame-40.png"}
                       alt="Vector Image"
                       className="w-6 h-6"
                     />
-                    <span className="text-xl ">Images</span>
+                    <span className="text-xl">Images</span>
                   </div>
                 </li>
-
                 <li
                   className={`flex items-center space-x-2 cursor-pointer ${
                     activeItems.documents ? "text-[#21fc0d]" : "text-white"
