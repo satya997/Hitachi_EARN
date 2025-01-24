@@ -1,10 +1,18 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { data, useSearchParams } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 import Sidebar from "../components/Sidebar";
 import Mainheader from "../components/Mainheader";
 import ImagePage from "../pages/ImagePage";
-const Modal = ({ onClose, prj_id, upatateclick }) => {
+import ImageUploadModal from "../pages/ImageUploadModal";
+
+const Modal = ({
+  onClose,
+  prj_id,
+  upatateclick,
+  isUpdateModal,
+  initialProjectId,
+}) => {
   const [formData, setFormData] = useState({
     projectName: "",
     projectId: "",
@@ -18,27 +26,25 @@ const Modal = ({ onClose, prj_id, upatateclick }) => {
     latitude: "",
     longitude: "",
     assetDescription: "",
-    status: "",
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
   const [searchParams] = useSearchParams();
-
+  const [displayedProjectId, setDisplayedProjectId] = useState(
+    initialProjectId || ""
+  );
+  const [isImageModalVisible, setIsImageModalVisible] = useState(false);
   const urlItem = searchParams.get("prj");
-
-  // console.log(searchParams.get("prj"), "Sss");
-
   useEffect(() => {
     const fetchProjectData = async () => {
       try {
-        const response = await axios.get(
-          `http://103.204.95.212:4000/api/projects/${prj_id}`
-        );
+        const response = await axios.get(`
+          http://103.204.95.212:4000/api/projects/${prj_id}`);
         if (response.status === 200) {
           const projectData = response.data.project;
 
-          console.log("form data is ", projectData);
+          // console.log("form data is ", projectData);
 
           setFormData({
             projectName: projectData.prj_name || "",
@@ -54,6 +60,7 @@ const Modal = ({ onClose, prj_id, upatateclick }) => {
             longitude: projectData.prj_sba_long || "",
             assetDescription: projectData.prj_sba_details || "",
           });
+          setDisplayedProjectId(projectData.prj_id || initialProjectId || "");
         } else {
           setError("Failed to fetch project data");
         }
@@ -93,17 +100,18 @@ const Modal = ({ onClose, prj_id, upatateclick }) => {
       prj_sba_lat: formData.latitude,
       prj_sba_long: formData.longitude,
       prj_sba_details: formData.assetDescription,
-      prj_status: formData.status,
     };
 
     try {
       const response = isUpdating
         ? await axios.put(
-            `http://103.204.95.212:4000/api/projects/updateProject/${formData.projectId}`,
+            `
+            http://103.204.95.212:4000/api/projects/updateProject/${formData.projectId}`,
             payload
           )
         : await axios.post(
-            `http://103.204.95.212:4000/api/projects/create-project`,
+            `
+            http://103.204.95.212:4000/api/projects/create-project`,
             payload
           );
 
@@ -113,6 +121,7 @@ const Modal = ({ onClose, prj_id, upatateclick }) => {
             ? "Project updated successfully!"
             : "Project created successfully!"
         );
+        setDisplayedProjectId(formData.projectId); // Update displayed project ID
         upatateclick(); // Call the update function passed as prop
 
         // Reset form data after successful submission
@@ -144,6 +153,37 @@ const Modal = ({ onClose, prj_id, upatateclick }) => {
     }
   };
 
+  const handleUploadClick = async () => {
+    if (uploadedFile) {
+      try {
+        const formData = new FormData();
+        formData.append("image", uploadedFile); // Add image file
+        formData.append("description", description); // Add description
+        formData.append("prj_id"); // Add project ID
+
+        const response = await axios.post(
+          "http://localhost:4000/api/images/upload",
+          formData,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          }
+        );
+
+        console.log("Upload success:", response.data);
+        onClose(); // Close the modal
+      } catch (error) {
+        console.error("Upload failed:", error);
+        alert("Failed to upload the image. Please try again.");
+      }
+    } else {
+      alert("Please upload an image before submitting.");
+    }
+  };
+
+  // console.log("Passing to ImageUploadModal:", displayedProjectId);
+
   const handleCancel = () => {
     setFormData({
       projectName: "",
@@ -161,13 +201,19 @@ const Modal = ({ onClose, prj_id, upatateclick }) => {
     });
   };
 
+  const handleImageUpload = (image) => {
+    console.log("Image uploaded:", image);
+    setIsImageModalVisible(false);
+  };
+
   return (
     <div className="fixed inset-0 z-20 flex items-center justify-center bg-black bg-opacity-60">
       <div className="bg-[#000000] text-white h-[785px] shadow-lg w-[1460px]  relative mb-5 mt-12  ">
         <div className="flex items-center justify-between pb-4 border-2 border-gray-600 ">
           <h2 className="text-[1.5rem] font-semibold ml-4 mt-1 ">
-            Well PSH Project ID : PRJ0001
-          </h2>
+            Well PSH Project ID : {displayedProjectId}
+          </h2>{" "}
+          {/* Updated header */}
           <button
             className="mt-1 mr-3 text-2xl text-red-600 "
             onClick={onClose}
@@ -180,9 +226,21 @@ const Modal = ({ onClose, prj_id, upatateclick }) => {
           <Sidebar />
           <div className="bg-[#171F31] p-6 h-[726px]">
             <Mainheader />
-
+            {/* {urlItem === "prj-images" ? (
+              <ImagePage /> */}
             {urlItem === "prj-images" ? (
-              <ImagePage/>
+              <>
+                {/* <button onClick={() => setIsImageModalVisible(true)}>
+                  Upload Image
+                  </button> */}
+                <ImagePage prjId1={displayedProjectId} />
+                {/* <ImageUploadModal
+                  visible={isImageModalVisible}
+                  onClose={() => setIsImageModalVisible(false)}
+                  onImageUpload={handleImageUpload}
+                  // prjId={displayedProjectId || "defaultId"}
+                /> */}
+              </>
             ) : (
               <form
                 onSubmit={handleSubmit}
@@ -198,7 +256,6 @@ const Modal = ({ onClose, prj_id, upatateclick }) => {
                   <strong>
                     <span className="ml-2 text-lg ">Project Information</span>
                   </strong>
-                  {/* <span className="text-lg">Project Information</span> */}
                   <span className="ml-4 text-lg ">&gt;</span>
                   <img
                     src={"/images/Frame-148.png" || "/placeholder.svg"}
@@ -211,9 +268,11 @@ const Modal = ({ onClose, prj_id, upatateclick }) => {
                     </span>
                   </u>
                   <span className="flex-grow"></span>
-                  <a href="#" className="mr-4 text-lg underline">
-                    Project Trail (Blockchain)
-                  </a>
+                  {isUpdateModal && (
+                    <a href="#" className="mr-4 text-lg underline">
+                      Project Trail (Blockchain)
+                    </a>
+                  )}
                 </div>
 
                 <div className="grid gap-8 lg:grid-cols-2">
@@ -444,7 +503,7 @@ const Modal = ({ onClose, prj_id, upatateclick }) => {
 
                   <button
                     type="submit"
-                    onClick={(e) => handleSubmit(e, !!prj_id)} // Pass whether it's an update
+                    onClick={(e) => handleSubmit(e, !!prj_id)}
                     className="submit-button"
                   >
                     {prj_id ? "Edit & Update" : "Save"}
@@ -453,7 +512,7 @@ const Modal = ({ onClose, prj_id, upatateclick }) => {
                   {!prj_id && (
                     <button
                       type="button"
-                      onClick={(e) => handleSaveAndNext(e)} // Handle Save & Next separately
+                      onClick={(e) => handleSaveAndNext(e)}
                       className="submit-button"
                     >
                       Save & Next

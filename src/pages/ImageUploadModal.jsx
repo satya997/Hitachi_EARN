@@ -1,11 +1,16 @@
 import React, { useState, useEffect } from "react";
+import axios from "axios";
 
-const ImageUploadModal = ({ visible, onClose, onImageUpload }) => {
-  const [uploadedImage, setUploadedImage] = useState(null);
+const ImageUploadModal = ({ visible, onClose, onImageUpload, disprjId }) => {
+  const [uploadedFile, setUploadedFile] = useState(null);
+  const [description, setDescription] = useState("");
+
+  console.log("disprjId :",disprjId);
 
   useEffect(() => {
     if (visible) {
-      setUploadedImage(null); // Reset the uploaded image when the modal is opened
+      setUploadedFile(null);
+      setDescription("");
     }
   }, [visible]);
 
@@ -13,16 +18,13 @@ const ImageUploadModal = ({ visible, onClose, onImageUpload }) => {
     return null;
   }
 
-  const handleImageUpload = (event) => {
-    const file = event.target.files ? event.target.files[0] : event.dataTransfer.files[0];
+  const handleFileChange = (event) => {
+    const file = event.target.files
+      ? event.target.files[0]
+      : event.dataTransfer.files[0];
     if (file) {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        const imageData = e.target.result;
-        setUploadedImage(imageData); // Update local state
-        onImageUpload(imageData); // Update parent state
-      };
-      reader.readAsDataURL(file);
+      setUploadedFile(file);
+      onImageUpload(URL.createObjectURL(file));
     }
   };
 
@@ -30,9 +32,30 @@ const ImageUploadModal = ({ visible, onClose, onImageUpload }) => {
     document.getElementById("file-input").click();
   };
 
-  const handleUploadClick = () => {
-    if (uploadedImage) {
-      onClose(); // Close the modal
+  const handleUploadClick = async () => {
+    if (uploadedFile) {
+      try {
+        const formData = new FormData();
+        formData.append("images", uploadedFile);
+        formData.append("description", description);
+        formData.append("prj_id", disprjId);
+        const response = await axios.post(
+          "http://103.204.95.212:4000/api/images/upload",
+          formData,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          }
+        );
+        console.log("Upload success:", response.data);
+        onClose();
+      } catch (error) {
+        console.error("Upload failed:", error);
+        alert("Failed to upload the image. Please try again.");
+      }
+    } else {
+      alert("Please upload an image before submitting.");
     }
   };
 
@@ -44,29 +67,23 @@ const ImageUploadModal = ({ visible, onClose, onImageUpload }) => {
   const handleDrop = (e) => {
     e.preventDefault();
     e.stopPropagation();
-    handleImageUpload(e);
+    handleFileChange(e);
   };
 
   return (
     <>
-      {/* Modal */}
-      <div className="fixed inset-0 z-50 flex items-center justify-center bg-opacity-40 ">
+      <div className="fixed inset-0 z-50 flex items-center justify-center bg-opacity-40">
         <div className="relative bg-white shadow-lg w-[686px] h-[455px] border-1 border-[#D9D9D9]">
-          {/* Header */}
-          <div className="relative flex items-center justify-center text-[#171f31] text-lg bg-[#F4F4F4] w-full h-[50px]">
-            {/* Centered Text */}
+          <div className="relative flex items-center justify-center text-[#171f31] text-lg bg-[#777777] w-full h-[50px]">
             <h2 className="text-lg font-semibold">Add Image Here</h2>
-
-            {/* Close Icon */}
             <button
-              className="absolute text-5xl text-[#21FC0D] right-3 mb-3 "
+              className="absolute text-5xl text-[#21FC0D] right-3 mb-3"
               onClick={onClose}
             >
               &times;
             </button>
           </div>
 
-          {/* Upload Section */}
           <div className="mt-4">
             <div
               className="flex flex-col items-center justify-center text-center bg-white border border-gray-300 rounded-md w-[569px] h-[100px] mt-9 ml-14 space-y-2 cursor-pointer"
@@ -74,10 +91,10 @@ const ImageUploadModal = ({ visible, onClose, onImageUpload }) => {
               onDragOver={handleDragOver}
               onDrop={handleDrop}
             >
-              {uploadedImage ? (
+              {uploadedFile ? (
                 <img
-                  src={uploadedImage}
-                  alt="Uploaded"
+                  src={URL.createObjectURL(uploadedFile) || "/placeholder.svg"}
+                  alt="Uploaded Preview"
                   className="object-cover h-[100px] rounded-sm w-[100px]"
                 />
               ) : (
@@ -99,11 +116,10 @@ const ImageUploadModal = ({ visible, onClose, onImageUpload }) => {
               type="file"
               accept="image/*"
               className="hidden"
-              onChange={handleImageUpload}
+              onChange={handleFileChange}
             />
           </div>
 
-          {/* Description Section */}
           <div className="mt-6 space-y-5 mr-14 ml-14 h-[150px]">
             <label
               htmlFor="description"
@@ -113,22 +129,23 @@ const ImageUploadModal = ({ visible, onClose, onImageUpload }) => {
             </label>
             <textarea
               id="description"
-              placeholder="Lorem Ipsum"
+              placeholder="Enter description here"
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
               className="block w-full p-2 mt-1 border border-gray-300 rounded-md shadow-sm focus:ring-green-500 focus:border-green-500 h-[100px] bg-white text-black"
             />
           </div>
 
-          {/* Buttons */}
           <div className="flex justify-end mt-6 space-x-4 mr-14">
             <button
-              className="px-3 py-1 text-[#21FC0D] bg-[#4A4A4A] rounded-md  w-[132px] h-[44px] border-1 border-[#21FC0D]  font-bold"
+              className="px-3 py-1 text-[#21FC0D] bg-[#4A4A4A] rounded-md  w-[132px] h-[44px] border-1 border-[#21FC0D] font-bold"
               onClick={onClose}
             >
               Cancel
             </button>
             <button
               className="px-3 py-1 text-[#21FC0D] rounded-md bg-[#4A4A4A] w-[132px] h-[44px] font-bold"
-              onClick={handleUploadClick} // Close modal on upload
+              onClick={handleUploadClick}
             >
               Upload
             </button>

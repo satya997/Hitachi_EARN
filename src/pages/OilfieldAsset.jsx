@@ -65,7 +65,6 @@ const OilfieldAsset = () => {
     navigate("/graphs");
   };
 
-  console.log( marketplaceData?.prj_id)
 
   return (
     <div className="flex flex-col w-full h-full">
