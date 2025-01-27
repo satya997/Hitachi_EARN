@@ -22,6 +22,7 @@ const Sidebar = ({ onClose, prj_id, updateClick }) => {
   const [isProjectInfoOpen, setIsProjectInfoOpen] = useState(false);
   const [isSoulBoundAssetOpen, setIsSoulBoundAssetOpen] = useState(false);
   const [isImagesOpen, setIsImagesOpen] = useState(false);
+  const [isDocumentOpen, setIsDocumentOpen] = useState(false);
   const [currentImage, setCurrentImage] = useState("/images/group-1.png");
 
   const toggleItem = (item) => {
@@ -37,6 +38,13 @@ const Sidebar = ({ onClose, prj_id, updateClick }) => {
         // Defer navigation to avoid modifying state during render
         setTimeout(() => {
           navigate("/oilfield_asset_marketplace?prj=prj-images");
+        }, 0);
+      }
+
+      if (item === "documents") {
+        // Defer navigation to avoid modifying state during render
+        setTimeout(() => {
+          navigate("/oilfield_asset_marketplace?prj=prj-documents");
         }, 0);
       }
 
@@ -61,11 +69,15 @@ const Sidebar = ({ onClose, prj_id, updateClick }) => {
         }
         if (item === "images") {
           setIsImagesOpen(!isImagesOpen);
+        } 
+        else if (item === "documents") {
+          setIsDocumentOpen(!isDocumentOpen);
         }
       } else {
         setIsProjectInfoOpen(false);
         setIsSoulBoundAssetOpen(false);
         setIsImagesOpen(false);
+        setIsDocumentOpen(false);
       }
 
       return newState;

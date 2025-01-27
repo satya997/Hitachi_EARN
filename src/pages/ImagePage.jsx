@@ -3,35 +3,14 @@ import Sidebar from "../components/Sidebar";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import ImageUploadModal from "../pages/ImageUploadModal";
-
 const ImagePage = ({ toggleItem, prjId1 }) => {
   const navigate = useNavigate();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [uploadedImages, setUploadedImages] = useState([]);
   const [selectedImages, setSelectedImages] = useState([]);
-
   console.log("ImagePage Project ID:", prjId1);
 
   // Fetch images from the API
-  // useEffect(() => {
-  //   const fetchImages = async () => {
-  //     try {
-  //       const response = await axios.get(
-  //         `http://103.204.95.212:4000/api/images/get-image/${prjId1}`
-  //       );
-  //       if (response.data && response.data.data) {
-  //         setUploadedImages(response.data.data); // Assuming response.data.data contains the images
-  //       } else {
-  //         console.log("No images found for the project.");
-  //       }
-  //     } catch (error) {
-  //       console.error("Error fetching images:", error);
-  //     }
-  //   };
-
-  //   fetchImages();
-  // }, [prjId1]);
-
   useEffect(() => {
     const fetchImages = async () => {
       try {
@@ -48,26 +27,16 @@ const ImagePage = ({ toggleItem, prjId1 }) => {
       }
     };
 
-    // Fetch images immediately
     fetchImages();
-
-    // Set interval to fetch images every 2 seconds
-    const interval = setInterval(fetchImages, 1000);
-
-    // Cleanup interval on component unmount
-    return () => clearInterval(interval);
   }, [prjId1]);
-
   // Open upload modal
   const handleUploadClick = () => {
     setIsModalOpen(true);
   };
-
   // Close modal
   const closeModal = () => {
     setIsModalOpen(false);
   };
-
   // Handle checkbox selection
   const handleCheckboxChange = (imageId) => {
     setSelectedImages(
@@ -77,14 +46,12 @@ const ImagePage = ({ toggleItem, prjId1 }) => {
           : [...prevSelected, imageId] // Add if not selected
     );
   };
-
   // Delete selected images
   const handleDelete = async () => {
     if (selectedImages.length === 0) {
       // alert("No images selected for deletion.");
       return;
     }
-
     try {
       // Delete images one by one
       for (const id of selectedImages) {
@@ -92,12 +59,10 @@ const ImagePage = ({ toggleItem, prjId1 }) => {
           `http://103.204.95.212:4000/api/images/del-image/${id}`
         );
       }
-
       // Update the uploaded images list after deletion
       setUploadedImages((prev) =>
         prev.filter((image) => !selectedImages.includes(image.id))
       );
-
       setSelectedImages([]); // Clear the selection
       // alert("Selected images have been deleted successfully.");
     } catch (error) {
@@ -105,7 +70,6 @@ const ImagePage = ({ toggleItem, prjId1 }) => {
       // alert("Failed to delete selected images. Please try again.");
     }
   };
-
   return (
     <div className="w-[1000px]">
       {/* Breadcrumb Navigation */}
@@ -156,51 +120,50 @@ const ImagePage = ({ toggleItem, prjId1 }) => {
           />
         </div>
       </div>
-
       {/* Display Uploaded Images as Cards with Scrollbar */}
-
+      
       <div className="grid grid-cols-4 gap-4 mt-4 max-h-[300px] overflow-y-auto">
-        {uploadedImages.map((image) => (
-          <div
-            key={image.id}
-            className="relative p-2 text-white bg-gray-800 rounded-md shadow-md"
-          >
-            {/* Checkbox positioned in the top-left */}
-            <input
-              type="checkbox"
-              className="absolute top-2 left-2"
-              onChange={() => handleCheckboxChange(image.id)} // Pass the correct image ID
-              checked={selectedImages.includes(image.id)} // Check if the image is selected
-            />
+  {uploadedImages.map((image) => (
+    <div
+      key={image.id}
+      className="relative p-2 text-white bg-gray-800 rounded-md shadow-md"
+    >
+      {/* Checkbox positioned in the top-left */}
+      <input
+        type="checkbox"
+        className="absolute top-2 left-2"
+        onChange={() => handleCheckboxChange(image.id)} // Pass the correct image ID
+        checked={selectedImages.includes(image.id)} // Check if the image is selected
+      />
 
-            {/* Image */}
-            <img
-              src={`http://103.204.95.212:4000/${image.filePath}`} // Use filePath for the image source
-              alt={`Uploaded ${image.id}`}
-              className="object-cover w-full h-32 mb-2 rounded-md" // Adjusted height
-            />
+      {/* Image */}
+      <img
+        src={`http://103.204.95.212:4000/${image.filePath}`} // Use filePath for the image source
+        alt={`Uploaded ${image.id}`}
+        className="object-cover w-full h-32 mb-2 rounded-md" // Adjusted height
+      />
 
-            {/* Information */}
-            <p className="text-xs">
-              <strong>ID:</strong> {image.id}
-            </p>
-            <p className="text-xs">
-              <strong>Description:</strong> {image.description || "N/A"}
-            </p>
-            <p className="text-xs">
-              <strong>Project ID:</strong> {image.prj_id}
-            </p>
-            <p className="text-xs">
-              <strong>Created At:</strong>{" "}
-              {new Date(image.createdAt).toLocaleString()}
-            </p>
-            <p className="text-xs">
-              <strong>Updated At:</strong>{" "}
-              {new Date(image.updatedAt).toLocaleString()}
-            </p>
-          </div>
-        ))}
-      </div>
+      {/* Information */}
+      <p className="text-xs">
+        <strong>ID:</strong> {image.id}
+      </p>
+      <p className="text-xs">
+        <strong>Description:</strong> {image.description || "N/A"}
+      </p>
+      <p className="text-xs">
+        <strong>Project ID:</strong> {image.prj_id}
+      </p>
+      <p className="text-xs">
+        <strong>Created At:</strong>{" "}
+        {new Date(image.createdAt).toLocaleString()}
+      </p>
+      <p className="text-xs">
+        <strong>Updated At:</strong>{" "}
+        {new Date(image.updatedAt).toLocaleString()}
+      </p>
+    </div>
+  ))}
+</div>
 
       {/* Image Upload Modal */}
       <ImageUploadModal
@@ -214,5 +177,4 @@ const ImagePage = ({ toggleItem, prjId1 }) => {
     </div>
   );
 };
-
 export default ImagePage;
