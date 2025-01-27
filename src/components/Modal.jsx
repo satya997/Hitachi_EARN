@@ -5,6 +5,7 @@ import Sidebar from "../components/Sidebar";
 import Mainheader from "../components/Mainheader";
 import ImagePage from "../pages/ImagePage";
 import ImageUploadModal from "../pages/ImageUploadModal";
+import Document from "../pages/Document.jsx";
 
 const Modal = ({
   onClose,
@@ -36,6 +37,8 @@ const Modal = ({
   );
   const [isImageModalVisible, setIsImageModalVisible] = useState(false);
   const urlItem = searchParams.get("prj");
+
+  console.log(urlItem, "urlitem is: ");
   useEffect(() => {
     const fetchProjectData = async () => {
       try {
@@ -226,21 +229,13 @@ const Modal = ({
           <Sidebar />
           <div className="bg-[#171F31] p-6 h-[726px]">
             <Mainheader />
-            {/* {urlItem === "prj-images" ? (
-              <ImagePage /> */}
+
             {urlItem === "prj-images" ? (
               <>
-                {/* <button onClick={() => setIsImageModalVisible(true)}>
-                  Upload Image
-                  </button> */}
                 <ImagePage prjId1={displayedProjectId} />
-                {/* <ImageUploadModal
-                  visible={isImageModalVisible}
-                  onClose={() => setIsImageModalVisible(false)}
-                  onImageUpload={handleImageUpload}
-                  // prjId={displayedProjectId || "defaultId"}
-                /> */}
               </>
+            ) : urlItem === "prj-documents" ? (
+              <Document />
             ) : (
               <form
                 onSubmit={handleSubmit}
