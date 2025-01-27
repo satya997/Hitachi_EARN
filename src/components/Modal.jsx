@@ -4,7 +4,9 @@ import { useSearchParams } from "react-router-dom";
 import Sidebar from "../components/Sidebar";
 import Mainheader from "../components/Mainheader";
 import ImagePage from "../pages/ImagePage";
-import ImageUploadModal from "../pages/ImageUploadModal";
+// import ImageUploadModal from "../pages/ImageUploadModal";
+import BlockchainModal from "../pages/BlockchainModal";
+
 
 const Modal = ({
   onClose,
@@ -35,6 +37,7 @@ const Modal = ({
     initialProjectId || ""
   );
   const [isImageModalVisible, setIsImageModalVisible] = useState(false);
+  const [isBlockchainModalOpen, setBlockchainModalOpen] = useState(false);
   const urlItem = searchParams.get("prj");
   useEffect(() => {
     const fetchProjectData = async () => {
@@ -268,11 +271,31 @@ const Modal = ({
                     </span>
                   </u>
                   <span className="flex-grow"></span>
-                  {isUpdateModal && (
+                  {/* {isUpdateModal && (
                     <a href="#" className="mr-4 text-lg underline">
                       Project Trail (Blockchain)
                     </a>
-                  )}
+                  )} */}
+                  {isUpdateModal && (
+        <a
+          href="#"
+          className="mr-4 text-lg underline"
+          onClick={(e) => {
+            e.preventDefault();
+            setBlockchainModalOpen(true);
+          }}
+        >
+          Project Trail (Blockchain)
+        </a>
+      )}
+
+      {/* BlockchainModal */}
+      {isBlockchainModalOpen && (
+        <BlockchainModal prj_id={prj_id}
+          onClose={() => setBlockchainModalOpen(false)} // Pass a close handle
+
+        />
+      )}
                 </div>
 
                 <div className="grid gap-8 lg:grid-cols-2">

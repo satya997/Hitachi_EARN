@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const ImageUploadModal = ({ visible, onClose, onImageUpload, disprjId }) => {
+  const navigate = useNavigate();
   const [uploadedFile, setUploadedFile] = useState(null);
   const [description, setDescription] = useState("");
 
-  console.log("disprjId :",disprjId);
+  console.log("disprjId :", disprjId);
 
   useEffect(() => {
     if (visible) {
@@ -49,7 +51,11 @@ const ImageUploadModal = ({ visible, onClose, onImageUpload, disprjId }) => {
           }
         );
         console.log("Upload success:", response.data);
+
+        // On successful upload, close the modal and navigate
         onClose();
+        // navigate("/oilfield_asset_marketplace?prj=prj-images");
+        // window.location.reload(); // Reload the page
       } catch (error) {
         console.error("Upload failed:", error);
         alert("Failed to upload the image. Please try again.");
