@@ -199,7 +199,7 @@ const Sidebar = ({ onClose, prj_id, updateClick }) => {
           alt="Asset Icon"
           className="w-6 h-6"
         />
-        <span className="text-xl">Project Valuation</span>
+        <span className="text-xl">Project Proposal</span>
       </li>
 
       <li
@@ -214,7 +214,7 @@ const Sidebar = ({ onClose, prj_id, updateClick }) => {
           alt="Asset Icon"
           className="w-6 h-6"
         />
-        <span className="text-xl">Investment Proposal</span>
+        <span className="text-xl">Invite Investors</span>
       </li>
 
       <li
@@ -229,7 +229,7 @@ const Sidebar = ({ onClose, prj_id, updateClick }) => {
           alt="Asset Icon"
           className="w-6 h-6"
         />
-        <span className="text-xl">Project NFTs</span>
+        <span className="text-xl">Buy/Sell EARN NFTs</span>
       </li>
 
       <li
@@ -244,10 +244,10 @@ const Sidebar = ({ onClose, prj_id, updateClick }) => {
           alt="Asset Icon"
           className="w-6 h-7"
         />
-        <span className="text-xl">Fractional Ownership Buy/Sell</span>
+        <span className="text-xl">Investors Actions</span>
       </li>
 
-      <li
+      {/* <li
         className={`flex items-center space-x-4 cursor-pointer ${
           activeItems.projectOperationsLive ? "text-[#21fc0d]" : ""
         }`}
@@ -260,7 +260,7 @@ const Sidebar = ({ onClose, prj_id, updateClick }) => {
           className="w-6 h-6"
         />
         <span className="text-xl">Project Operations Live</span>
-      </li>
+      </li> */}
     </div>
   );
 };

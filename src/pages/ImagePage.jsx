@@ -132,46 +132,49 @@ const ImagePage = ({ toggleItem, prjId1 }) => {
       </div>
 
       {/* Display Uploaded Images as Cards with Scrollbar */}
-      <div className="grid grid-cols-4 gap-4 mt-4 max-h-[500px] overflow-y-auto">
-        {uploadedImages.map((image) => (
-          <div
-            key={image.id}
-            className="p-4 text-white bg-gray-800 rounded-md shadow-md"
-          >
-            <img
-              src={`http://103.204.95.212:4000/${image.filePath}`} // Use filePath for the image source
-              alt={`Uploaded ${image.id}`}
-              className="object-cover w-full h-48 mb-2 rounded-md"
-            />
-            <p className="text-sm">
-              <strong>ID:</strong> {image.id}
-            </p>
-            <p className="text-sm">
-              <strong>Description:</strong> {image.description || "N/A"}
-            </p>
-            <p className="text-sm">
-              <strong>Project ID:</strong> {image.prj_id}
-            </p>
-            <p className="text-sm">
-              <strong>Created At:</strong>{" "}
-              {new Date(image.createdAt).toLocaleString()}
-            </p>
-            <p className="text-sm">
-              <strong>Updated At:</strong>{" "}
-              {new Date(image.updatedAt).toLocaleString()}
-            </p>
-            <div className="flex items-center mt-2">
-              <input
-                type="checkbox"
-                className="mr-2"
-                onChange={() => handleCheckboxChange(image.id)} // Pass the correct image ID
-                checked={selectedImages.includes(image.id)} // Check if the image is selected
-              />
-              <span>Select</span>
-            </div>
-          </div>
-        ))}
-      </div>
+      
+      <div className="grid grid-cols-4 gap-4 mt-4 max-h-[300px] overflow-y-auto">
+  {uploadedImages.map((image) => (
+    <div
+      key={image.id}
+      className="relative p-2 text-white bg-gray-800 rounded-md shadow-md"
+    >
+      {/* Checkbox positioned in the top-left */}
+      <input
+        type="checkbox"
+        className="absolute top-2 left-2"
+        onChange={() => handleCheckboxChange(image.id)} // Pass the correct image ID
+        checked={selectedImages.includes(image.id)} // Check if the image is selected
+      />
+
+      {/* Image */}
+      <img
+        src={`http://103.204.95.212:4000/${image.filePath}`} // Use filePath for the image source
+        alt={`Uploaded ${image.id}`}
+        className="object-cover w-full h-32 mb-2 rounded-md" // Adjusted height
+      />
+
+      {/* Information */}
+      <p className="text-xs">
+        <strong>ID:</strong> {image.id}
+      </p>
+      <p className="text-xs">
+        <strong>Description:</strong> {image.description || "N/A"}
+      </p>
+      <p className="text-xs">
+        <strong>Project ID:</strong> {image.prj_id}
+      </p>
+      <p className="text-xs">
+        <strong>Created At:</strong>{" "}
+        {new Date(image.createdAt).toLocaleString()}
+      </p>
+      <p className="text-xs">
+        <strong>Updated At:</strong>{" "}
+        {new Date(image.updatedAt).toLocaleString()}
+      </p>
+    </div>
+  ))}
+</div>
 
       {/* Image Upload Modal */}
       <ImageUploadModal
