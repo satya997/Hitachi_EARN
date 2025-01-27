@@ -42,7 +42,7 @@ const steps = [
     ),
   },
   {
-    label: "EARN\nNFTs",
+    label: "Bus/Sell\nEARNNFTs",
     icon: () => (
       <img
         src={"/images/Group-19.png" || "/placeholder.svg"}
@@ -61,16 +61,16 @@ const steps = [
       />
     ),
   },
-  {
-    label: "Project\nOpr Live",
-    icon: () => (
-      <img
-        src={"/images/Group-21.png" || "/placeholder.svg"}
-        alt="Project Opr Live"
-        className="w-10 h-10"
-      />
-    ),
-  },
+  // {
+  //   label: "Project\nOpr Live",
+  //   icon: () => (
+  //     <img
+  //       src={"/images/Group-21.png" || "/placeholder.svg"}
+  //       alt="Project Opr Live"
+  //       className="w-10 h-10"
+  //     />
+  //   ),
+  // },
 ];
 
 const Mainheader = () => {
