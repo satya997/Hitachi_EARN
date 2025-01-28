@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 
-const DocumentUploadModal = ({ visible, onClose, onImageUpload, disprjId }) => {
+const DocumentUploadModal = ({ visible, onClose, onImageUpload, prjId }) => {
   const [uploadedFile, setUploadedFile] = useState(null);
   const [description, setDescription] = useState("");
   const [pdfPreview, setPdfPreview] = useState(null);
 
-  console.log("disprjId :", disprjId);
+  console.log("document upload modal :", prjId);
 
   useEffect(() => {
     if (visible) {
@@ -44,11 +44,11 @@ const DocumentUploadModal = ({ visible, onClose, onImageUpload, disprjId }) => {
     if (uploadedFile) {
       try {
         const formData = new FormData();
-        formData.append("images", uploadedFile);
+        formData.append("documents", uploadedFile);
         formData.append("description", description);
-        formData.append("prj_id", disprjId);
+        formData.append("prj_id", prjId);
         const response = await axios.post(
-          "http://103.204.95.212:4000/api/images/upload",
+          "http://103.204.95.212:4000/api/documents/upload",
           formData,
           {
             headers: {

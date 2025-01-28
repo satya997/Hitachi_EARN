@@ -5,6 +5,8 @@ import Sidebar from "../components/Sidebar";
 import Mainheader from "../components/Mainheader";
 import ImagePage from "../pages/ImagePage";
 import ImageUploadModal from "../pages/ImageUploadModal";
+import BlockchainModal from "../pages/BlockchainModal";
+import Document from "../pages/Document";
 
 const Modal = ({
   onClose,
@@ -235,7 +237,7 @@ const Modal = ({
                 <ImagePage prjId1={displayedProjectId} />
               </>
             ) : urlItem === "prj-documents" ? (
-              <Document />
+              <Document prjId1={displayedProjectId}/>
             ) : (
               <form
                 onSubmit={handleSubmit}
@@ -269,25 +271,25 @@ const Modal = ({
                     </a>
                   )} */}
                   {isUpdateModal && (
-        <a
-          href="#"
-          className="mr-4 text-lg underline"
-          onClick={(e) => {
-            e.preventDefault();
-            setBlockchainModalOpen(true);
-          }}
-        >
-          Project Trail (Blockchain)
-        </a>
-      )}
+                    <a
+                      href="#"
+                      className="mr-4 text-lg underline"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        setBlockchainModalOpen(true);
+                      }}
+                    >
+                      Project Trail (Blockchain)
+                    </a>
+                  )}
 
-      {/* BlockchainModal */}
-      {isBlockchainModalOpen && (
-        <BlockchainModal prj_id={prj_id}
-          onClose={() => setBlockchainModalOpen(false)} // Pass a close handle
-
-        />
-      )}
+                  {/* BlockchainModal */}
+                  {isBlockchainModalOpen && (
+                    <BlockchainModal
+                      prj_id={prj_id}
+                      onClose={() => setBlockchainModalOpen(false)} // Pass a close handle
+                    />
+                  )}
                 </div>
 
                 <div className="grid gap-8 lg:grid-cols-2">

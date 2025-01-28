@@ -3,14 +3,14 @@ import Sidebar from "../components/Sidebar";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import ImageUploadModal from "../pages/ImageUploadModal";
+
 const ImagePage = ({ toggleItem, prjId1 }) => {
   const navigate = useNavigate();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [uploadedImages, setUploadedImages] = useState([]);
   const [selectedImages, setSelectedImages] = useState([]);
-  console.log("ImagePage Project ID:", prjId1);
+  const [previewImage, setPreviewImage] = useState(null); // State for the preview modal
 
-  // Fetch images from the API
   useEffect(() => {
     const fetchImages = async () => {
       try {
@@ -18,7 +18,7 @@ const ImagePage = ({ toggleItem, prjId1 }) => {
           `http://103.204.95.212:4000/api/images/get-image/${prjId1}`
         );
         if (response.data && response.data.data) {
-          setUploadedImages(response.data.data); // Assuming response.data.data contains the images
+          setUploadedImages(response.data.data);
         } else {
           console.log("No images found for the project.");
         }
@@ -28,51 +28,55 @@ const ImagePage = ({ toggleItem, prjId1 }) => {
     };
 
     fetchImages();
+    const interval = setInterval(fetchImages, 1000);
+    return () => clearInterval(interval);
   }, [prjId1]);
-  // Open upload modal
+
   const handleUploadClick = () => {
     setIsModalOpen(true);
   };
-  // Close modal
+
   const closeModal = () => {
     setIsModalOpen(false);
   };
-  // Handle checkbox selection
+
   const handleCheckboxChange = (imageId) => {
-    setSelectedImages(
-      (prevSelected) =>
-        prevSelected.includes(imageId)
-          ? prevSelected.filter((id) => id !== imageId) // Remove if already selected
-          : [...prevSelected, imageId] // Add if not selected
+    setSelectedImages((prevSelected) =>
+      prevSelected.includes(imageId)
+        ? prevSelected.filter((id) => id !== imageId)
+        : [...prevSelected, imageId]
     );
   };
-  // Delete selected images
+
   const handleDelete = async () => {
     if (selectedImages.length === 0) {
-      // alert("No images selected for deletion.");
       return;
     }
     try {
-      // Delete images one by one
       for (const id of selectedImages) {
         await axios.delete(
           `http://103.204.95.212:4000/api/images/del-image/${id}`
         );
       }
-      // Update the uploaded images list after deletion
       setUploadedImages((prev) =>
         prev.filter((image) => !selectedImages.includes(image.id))
       );
-      setSelectedImages([]); // Clear the selection
-      // alert("Selected images have been deleted successfully.");
+      setSelectedImages([]);
     } catch (error) {
       console.error("Error deleting images:", error);
-      // alert("Failed to delete selected images. Please try again.");
     }
   };
+
+  const handleImageClick = (image) => {
+    setPreviewImage(image);
+  };
+
+  const closePreviewModal = () => {
+    setPreviewImage(null);
+  };
+
   return (
     <div className="w-[1000px]">
-      {/* Breadcrumb Navigation */}
       <div className="flex items-center mt-9 text-white/90">
         <img
           src={"/images/Frame-148.png" || "/placeholder.svg"}
@@ -100,18 +104,16 @@ const ImagePage = ({ toggleItem, prjId1 }) => {
           alt="Dropdown Icon"
           className="w-6 h-6 ml-4"
         />
-        <span className="mb-1 ml-3 text-lg font-semibold underline cursor-pointer">
+        <span className="mb-1 ml-3 text-lg font-semibold cursor-pointer">
           Image
         </span>
         <div className="flex items-center gap-4 ml-auto text-lg">
-          {/* Upload Icon */}
           <img
             src="/icons/upload-2.png"
             alt="Upload"
             className="w-6 h-6 cursor-pointer"
             onClick={handleUploadClick}
           />
-          {/* Delete Icon */}
           <img
             src="/icons/delete.png"
             alt="Delete"
@@ -120,61 +122,68 @@ const ImagePage = ({ toggleItem, prjId1 }) => {
           />
         </div>
       </div>
-      {/* Display Uploaded Images as Cards with Scrollbar */}
-      
-      <div className="grid grid-cols-4 gap-4 mt-4 max-h-[300px] overflow-y-auto">
-  {uploadedImages.map((image) => (
-    <div
-      key={image.id}
-      className="relative p-2 text-white bg-gray-800 rounded-md shadow-md"
-    >
-      {/* Checkbox positioned in the top-left */}
-      <input
-        type="checkbox"
-        className="absolute top-2 left-2"
-        onChange={() => handleCheckboxChange(image.id)} // Pass the correct image ID
-        checked={selectedImages.includes(image.id)} // Check if the image is selected
-      />
-
-      {/* Image */}
-      <img
-        src={`http://103.204.95.212:4000/${image.filePath}`} // Use filePath for the image source
-        alt={`Uploaded ${image.id}`}
-        className="object-cover w-full h-32 mb-2 rounded-md" // Adjusted height
-      />
-
-      {/* Information */}
-      <p className="text-xs">
-        <strong>ID:</strong> {image.id}
-      </p>
-      <p className="text-xs">
-        <strong>Description:</strong> {image.description || "N/A"}
-      </p>
-      <p className="text-xs">
-        <strong>Project ID:</strong> {image.prj_id}
-      </p>
-      <p className="text-xs">
-        <strong>Created At:</strong>{" "}
-        {new Date(image.createdAt).toLocaleString()}
-      </p>
-      <p className="text-xs">
-        <strong>Updated At:</strong>{" "}
-        {new Date(image.updatedAt).toLocaleString()}
-      </p>
-    </div>
-  ))}
-</div>
-
-      {/* Image Upload Modal */}
+      <div
+        className={`grid grid-cols-4 gap-4 mt-4 h-[500px] ${
+          uploadedImages.length > 8 ? "overflow-y-scroll" : "overflow-hidden"
+        } scrollbar-thin scrollbar-thumb-electric-green scrollbar-track-gray-700`}
+      >
+        {uploadedImages.map((image) => (
+          <div
+            key={image.id}
+            className="relative p-2 text-white bg-gray-800 rounded-md shadow-md h-[240px]"
+          >
+            <input
+              type="checkbox"
+              className="absolute left-3 top-3 w-5 h-5 cursor-pointer bg-[#FFFFFF] border-[#000000]"
+              onChange={() => handleCheckboxChange(image.id)}
+              checked={selectedImages.includes(image.id)}
+            />
+            <img
+              src={`http://103.204.95.212:4000/${image.filePath}`}
+              alt={`Uploaded ${image.id}`}
+              onClick={() => handleImageClick(image)}
+              className="object-cover w-full h-32 mb-2 rounded-md cursor-pointer"
+            />
+            <p className="gap-4 text-xs">
+              <strong>Description:</strong> {image.description || "N/A"}
+            </p>
+            <p className="gap-4 text-xs">
+              <strong>Created At:</strong>{" "}
+              {new Date(image.createdAt).toLocaleString()}
+            </p>
+          </div>
+        ))}
+      </div>
       <ImageUploadModal
         onClose={closeModal}
         visible={isModalOpen}
         disprjId={prjId1}
         onImageUpload={(newImage) => {
-          setUploadedImages((prev) => [...prev, newImage]); // Append the new image
+          setUploadedImages((prev) => [...prev, newImage]);
         }}
       />
+      {previewImage && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-75">
+          <div className="relative w-full max-w-lg p-4 bg-white rounded-lg">
+            <button
+              className="absolute text-gray-500 top-2 right-2 hover:text-black"
+              onClick={closePreviewModal}
+            >
+              &times;
+            </button>
+            <img
+              src={`http://103.204.95.212:4000/${previewImage.filePath}`}
+              alt="Preview"
+              className="w-full h-auto rounded-md"
+            />
+            <p className="mt-2 text-center">
+              {previewImage.description || "No description available"}
+            </p>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
+
 export default ImagePage;
